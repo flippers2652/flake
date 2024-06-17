@@ -5,10 +5,6 @@
 { config, lib, pkgs, inputs , ... }:
 
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-    ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   networking.hostName="BlackFish";
   boot.loader.grub = {
