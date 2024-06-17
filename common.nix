@@ -6,7 +6,7 @@
 
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  networking.hostName="BlackFish";
+
   boot.loader.grub = {
     enable = true;
     zfsSupport = true;
@@ -97,8 +97,5 @@
   virtualisation.docker.enable = true;
 
   services.openssh.enable = true;
-
-  system.stateVersion = "24.05"; # Don't Change!
-
 }
 
