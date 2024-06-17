@@ -93,6 +93,7 @@
 
   environment.systemPackages = with pkgs; [
     vim
+    git
   ];
   virtualisation.docker.enable = true;
 
