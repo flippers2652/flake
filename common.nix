@@ -24,6 +24,8 @@
   networking.networkmanager.enable = true;
   time.timeZone = "Europe/London";
   i18n.defaultLocale = "en_GB.UTF-8";
+  services.xserver.xkb.layout = "gb";
+
   console = {
     font = "Lat2-Terminus16";
     keyMap = "uk";
@@ -90,6 +92,13 @@
     git
   ];
   virtualisation.docker.enable = true;
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    #settings.PermitRootLogin = "yes";
+  };
+
 }
 

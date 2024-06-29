@@ -42,10 +42,7 @@
   };
     # Define the www-data group
   users.groups.www-data = { };
-  networking.firewall = {
-  enable = false;
-  allowedTCPPorts = [ 80 443 ];
-  };
+  networking.firewall.allowedTCPPorts = [ 80 443 ];
   # Define the www-data user and add them to the www-data group
   users.users.www-data = {
     isSystemUser = true;
@@ -55,87 +52,16 @@
     description = "Web Server User";
     shell = pkgs.bash;
   };
-  services.phpfpm.pools.www-data = {
-    user = "www-data";
-    settings = {
-      "listen.owner" = config.services.nginx.user;
-      "pm" = "dynamic";
-      "pm.max_children" = 32;
-      "pm.max_requests" = 500;
-      "pm.start_servers" = 2;
-      "pm.min_spare_servers" = 2;
-      "pm.max_spare_servers" = 5;
-      "php_admin_value[error_log]" = "stderr";
-      "php_admin_flag[log_errors]" = true;
-      "catch_workers_output" = true;
-    };
-    phpEnv."PATH" = lib.makeBinPath [ pkgs.php.buildEnv {
-          extensions = {
-            enabled,
-            all,
-          }:
-            enabled
-            ++ (with all; [
-              redis
-              xdebug
-            ]);
-          extraConfig = ''
-            xdebug.mode=debug
-          '';
-        } ];
-  };
-  services.nginx = {
-    enable = true;
-    user = "www-data";
-    virtualHosts."172.16.0.26"={
-      root = "/var/www/panel/public";
-      extraConfig = ''
-        
-            # Replace the example <domain> with your domain name or IP address
+  users.users."flippers2652".openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOGXIXHv3T/ZUDC29z1N5JeN/zW6NO8p4X3nRqq8cvp2 flippers2652" # content of authorized_keys file
+    # note: ssh-copy-id will add user@your-machine after the public key
+    # but we can remove the "@your-machine" part
+  ];
 
 
-            index index.html index.htm index.php;
-            charset utf-8;
 
-            location / {
-                try_files $uri $uri/ /index.php?$query_string;
-            }
 
-            location = /favicon.ico { access_log off; log_not_found off; }
-            location = /robots.txt  { access_log off; log_not_found off; }
 
-            access_log off;
-            error_log  /var/log/nginx/pterodactyl.app-error.log error;
-
-            # allow larger file uploads and longer script runtimes
-            client_max_body_size 100m;
-            client_body_timeout 120s;
-
-            sendfile off;
-
-            location ~ \.php$ {
-                fastcgi_split_path_info ^(.+\.php)(/.+)$;
-                fastcgi_pass unix:/run/phpfpm/www-data.sock;
-                fastcgi_index index.php;
-                include ${pkgs.nginx}/conf/fastcgi_params;
-                fastcgi_param PHP_VALUE "upload_max_filesize = 100M \n post_max_size=100M";
-                fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                fastcgi_param HTTP_PROXY "";
-                fastcgi_intercept_errors off;
-                fastcgi_buffer_size 16k;
-                fastcgi_buffers 4 16k;
-                fastcgi_connect_timeout 300;
-                fastcgi_send_timeout 300;
-                fastcgi_read_timeout 300;
-            }
-
-            location ~ /\.ht {
-                deny all;
-            }
-        
-      '';};
-
-  };
   system.stateVersion = "24.05";
 }
 
