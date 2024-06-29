@@ -28,14 +28,15 @@
     font = "Lat2-Terminus16";
     keyMap = "uk";
   };
-
+  services.flatpak.enable = true;
   services.xserver.enable = true;
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
   services.displayManager.defaultSession = "plasma";
   services.displayManager.sddm.wayland.enable = true;
   services.xserver.videoDrivers = [ "amdgpu" ];
-
+  services.zfs.autoScrub.enable = true;
+  programs.nix-ld = { enable = true; libraries = pkgs.steam-run.fhsenv.args.multiPkgs pkgs; };
   security.rtkit.enable = true;
   sound.enable = true;
   services.pipewire = {
@@ -76,6 +77,8 @@
       heroic
       vim
       goverlay
+      idris2
+      vscode
     ];
     hashedPassword="$y$j9T$JW7m827Kqutlmdw610V1w/$WqCP4GMLquPhdFsf2Bbgy//iHmIyFiK5fUaQCsqpvqD";
     uid = 2652;
@@ -96,7 +99,7 @@
     git
   ];
   virtualisation.docker.enable = true;
-
+  networking.firewall.enable = false;
   services.openssh.enable = true;
 }
 
