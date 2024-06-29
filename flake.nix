@@ -2,6 +2,7 @@
   description = "Flake";
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    pterodactl.url = "git+https://github.com/pterodactyl/panel";
 };
 
   outputs = { self, nixpkgs, ... }@inputs: {
