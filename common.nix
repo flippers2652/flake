@@ -50,15 +50,6 @@
   nixpkgs.config.allowUnfree = true;
 
   users.mutableUsers=false;
-  users.users.Admin = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" ]; # Enable ‘sudo’ for the user.
-    packages = with pkgs; [
-      firefox
-    ];
-    password="testing";
-    uid = 1234;
-  };
   users.users.flippers2652 = {
     isNormalUser = true;
     extraGroups = [ "wheel" "docker" "networkmanager"]; # Enable ‘sudo’ for the user.
@@ -99,7 +90,6 @@
     git
   ];
   virtualisation.docker.enable = true;
-  networking.firewall.enable = false;
   services.openssh.enable = true;
 }
 
